@@ -7,6 +7,7 @@ from .models import Country
 from .serializers import CountrySerializer, CountryListSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -77,5 +78,11 @@ class CountryViewSet(viewsets.ModelViewSet):
         serializer = CountryListSerializer(countries, many=True)
         return Response(serializer.data)
     
+
+
+@login_required
+def country_list_view(request):
+    countries = Country.objects.all()
+    return render(request, 'countries/country_list.html', {'countries': countries})
 
 

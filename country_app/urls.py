@@ -7,5 +7,6 @@ router.register(r'countries', views.CountryViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('', views.country_list_view, name='country_list'),
     
 ]

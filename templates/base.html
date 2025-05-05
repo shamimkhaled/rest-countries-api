@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Country Information {% endblock %}</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <style>
+        .flag-img {
+            width: 48px;
+            height: 32px;
+            object-fit: cover;
+        }
+       
+    </style>
+
+</head>
+<body>
+    <nav class="navbar is-dark" role="navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'country_list' %}">
+                <strong>Countries API</strong>
+            </a>
+        </div>
+        
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                        <a class="button is-light" href="">
+                            Logout
+                        </a>
+                        <a class="button is-light" href="">
+                            Login
+                        </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+ 
+    <section class="section">
+        <div class="container">
+            {% block content %}
+            
+            
+            {% endblock %}
+        </div>
+    </section>
+    
+    {% block scripts %}
+    
+    {% endblock %}
+   
+</body>
+</html>
+

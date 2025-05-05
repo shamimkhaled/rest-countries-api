@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+
+
+
+{% block content %}
+<h1 class="title">Country Information</h1>
+
+<div class="field">
+    <div class="control has-icons-left">
+        <input class="input" type="text" id="searchInput" placeholder="Search for a country...">
+        <span class="icon is-small is-left">
+            <i class="fas fa-search"></i>
+        </span>
+    </div>
+</div>
+
+<table class="table is-fullwidth is-striped is-hoverable">
+    <thead>
+        <tr>
+            <th>Flag</th>
+            <th>Name</th>
+            <th>CCA2</th>
+            <th>Capital</th>
+            <th>Population</th>
+            <th>Timezone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="countryTableBody">
+        {% for country in countries %}
+        <tr>
+            <td>
+                <figure class="image is-48x48">
+                    <img src="{{ country.flag_png }}" alt="{{ country.name }} flag" class="flag-img">
+                </figure>
+            </td>
+            <td>{{ country.name }}</td>
+            <td>{{ country.cca2 }}</td>
+            <td>{{ country.capital }}</td>
+            <td>{{ country.population|intcomma }}</td>
+            <td>{{ country.timezones.0 }}</td>
+            <td>
+                <button class="button is-small is-info" onclick="showDetails({{ country.id }})">
+                    Details
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Details Modal -->
+<div class="modal" id="detailsModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title" id="modalTitle">Country Details</p>
+            <button class="delete" onclick="closeModal()"></button>
+        </header>
+        <section class="modal-card-body" id="modalBody">
+            <!-- Content will be loaded dynamically -->
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button" onclick="closeModal()">Close</button>
+        </footer>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const input = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#countryTableBody tr');
+        
+        rows.forEach(row => {
+            const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            row.style.display = name.includes(input) ? '' : 'none';
+        });
+    });
+
+    // Modal functions
+    function showDetails(countryId) {
+        // Show modal
+        document.getElementById('detailsModal').classList.add('is-active');
+        
+        // Fetch country details
+        fetch(`/api/countries/${countryId}/`)
+        .then(response => response.json())
+        .then(country => {
+            document.getElementById('modalTitle').textContent = country.name;
+            
+            let languages = '';
+            for (let key in country.languages) {
+                languages += `<span class="tag is-info mr-2">${key}: ${country.languages[key]}</span>`;
+            }
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div class="content">
+                    <p><strong>Region:</strong> ${country.region}</p>
+                    <p><strong>Subregion:</strong> ${country.subregion || 'N/A'}</p>
+                    <p><strong>Languages:</strong><br>${languages}</p>
+                    <p><strong>Timezones:</strong> ${country.timezones.join(', ')}</p>
+                </div>
+            `;
+            
+            // Fetch regional countries
+            fetch(`/api/countries/${countryId}/regional_countries/`)
+            .then(response => response.json())
+            .then(regionalCountries => {
+                let regionalHtml = '<div class="content"><h5 class="title is-5">Regional Countries:</h5><div class="tags">';
+                regionalCountries.forEach(c => {
+                    regionalHtml += `<span class="tag is-primary is-light">${c.name}</span>`;
+                });
+                regionalHtml += '</div></div>';
+                document.getElementById('modalBody').innerHTML += regionalHtml;
+            });
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('detailsModal').classList.remove('is-active');
+    }
+
+    // Close modal when clicking on background
+    document.querySelector('.modal-background').addEventListener('click', closeModal);
+</script>
+
+
+
+{% endblock %}
+
+
