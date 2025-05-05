@@ -1,13 +1,12 @@
-# Create this file at: countries/management/commands/fetch_countries.py
 import requests
 from django.core.management.base import BaseCommand
 from country_app.models import Country
 
 class Command(BaseCommand):
-    help = 'Fetches country data from REST API and stores in database'
+    help = 'Fetches the country data from REST API and stores in database'
 
     def handle(self, *args, **options):
-        self.stdout.write('Fetching country data...')
+        self.stdout.write('Fetching the country data...')
         
         try:
             response = requests.get('https://restcountries.com/v3.1/all')
@@ -50,3 +49,8 @@ class Command(BaseCommand):
             
         except requests.RequestException as e:
             self.stdout.write(self.style.ERROR(f'Error fetching data: {e}'))
+            
+            
+            
+            
+            
