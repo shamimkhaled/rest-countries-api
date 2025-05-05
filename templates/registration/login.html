@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="column is-half is-offset-one-quarter">
+      <h2 class="title is-3 has-text-centered">Login</h2>
+
+      {% if form.errors %}
+        <div class="notification is-danger">
+          {{ form.errors }}
+        </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="field">
+          <label class="label">Username</label>
+          <div class="control">
+            <input class="input" type="text" name="username" required placeholder="Enter username">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input class="input" type="password" name="password" required placeholder="Enter password">
+          </div>
+        </div>
+
+        <div class="field is-grouped is-grouped-right">
+          <div class="control">
+            <button class="button is-link">Login</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

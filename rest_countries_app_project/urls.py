@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from country_app.views import custom_logout_view
 
 
 schema_view = get_schema_view(
@@ -38,6 +39,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('country_app.urls')),
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', custom_logout_view, name='logout'),
     
     
     # Swagger documentation api

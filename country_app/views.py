@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import render
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 from .models import Country
 from .serializers import CountrySerializer, CountryListSerializer
 from drf_yasg.utils import swagger_auto_schema
@@ -84,5 +86,11 @@ class CountryViewSet(viewsets.ModelViewSet):
 def country_list_view(request):
     countries = Country.objects.all()
     return render(request, 'countries/country_list.html', {'countries': countries})
+
+
+
+def custom_logout_view(request):
+    logout(request)
+    return redirect('login')  
 
 
