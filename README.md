@@ -217,6 +217,7 @@ rest-countries-api/
 │   │   └── country_list.html      # Country list page
 │   └── registration/
 │       └── login.html             # Login page
+├──static/
 ├── db.sqlite3                     # SQLite database
 ├── manage.py                      # Django management script
 ├── requirements.txt               # Python dependencies
